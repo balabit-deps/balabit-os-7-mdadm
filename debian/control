@@ -4,8 +4,8 @@ Priority: optional
 Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
 XSBC-Original-Maintainer: Debian mdadm maintainers <pkg-mdadm-devel@lists.alioth.debian.org>
 Uploaders: Dimitri John Ledkov <xnox@debian.org>, Dimitri John Ledkov <xnox@ubuntu.com>
-Build-Depends: debhelper (>= 9), po-debconf, groff-base
-Standards-Version: 4.1.1
+Build-Depends: debhelper (>= 11), po-debconf, groff-base
+Standards-Version: 4.1.4
 Vcs-Git: https://git.dgit.debian.org/mdadm
 Vcs-Browser: https://browse.dgit.debian.org/mdadm.git
 Homepage: http://neil.brown.name/blog/mdadm

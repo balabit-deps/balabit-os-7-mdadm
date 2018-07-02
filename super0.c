@@ -76,8 +76,6 @@ static void super0_swap_endian(struct mdp_superblock_s *sb)
 
 }
 
-#ifndef MDASSEMBLE
-
 static void examine_super0(struct supertype *st, char *homehost)
 {
 	mdp_super_t *sb = st->sb;
@@ -231,7 +229,7 @@ static void examine_super0(struct supertype *st, char *homehost)
 	     d++) {
 		mdp_disk_t *dp;
 		char *dv;
-		char nb[5];
+		char nb[11];
 		int wonly, failfast;
 		if (d>=0) dp = &sb->disks[d];
 		else dp = &sb->this_disk;
@@ -353,7 +351,7 @@ err:
 static void detail_super0(struct supertype *st, char *homehost)
 {
 	mdp_super_t *sb = st->sb;
-	printf("           UUID : ");
+	printf("              UUID : ");
 	if (sb->minor_version >= 90)
 		printf("%08x:%08x:%08x:%08x", sb->set_uuid0, sb->set_uuid1,
 		       sb->set_uuid2, sb->set_uuid3);
@@ -367,7 +365,7 @@ static void detail_super0(struct supertype *st, char *homehost)
 		if (memcmp(&sb->set_uuid2, hash, 8)==0)
 			printf(" (local to host %s)", homehost);
 	}
-	printf("\n         Events : %d.%d\n\n", sb->events_hi, sb->events_lo);
+	printf("\n            Events : %d.%d\n\n", sb->events_hi, sb->events_lo);
 }
 
 static void brief_detail_super0(struct supertype *st)
@@ -380,7 +378,6 @@ static void brief_detail_super0(struct supertype *st)
 	else
 		printf("%08x", sb->set_uuid0);
 }
-#endif
 
 static int match_home0(struct supertype *st, char *homehost)
 {
@@ -592,8 +589,8 @@ static int update_super0(struct supertype *st, struct mdinfo *info,
 			 * being marked 'sync'
 			 */
 			add = (1<<MD_DISK_SYNC);
-		if (((sb->disks[d].state & ~mask) | add)
-		    != (unsigned)info->disk.state) {
+		if (((sb->disks[d].state & ~mask) | add) !=
+		    (unsigned)info->disk.state) {
 			sb->disks[d].state = info->disk.state | wonly |failfast;
 			rv = 1;
 		}
@@ -725,7 +722,7 @@ static int update_super0(struct supertype *st, struct mdinfo *info,
  * We use the first 8 bytes (64bits) of the sha1 of the host name
  */
 static int init_super0(struct supertype *st, mdu_array_info_t *info,
-		       unsigned long long size, char *ignored_name,
+		       struct shape *s, char *ignored_name,
 		       char *homehost, int *uuid,
 		       unsigned long long data_offset)
 {
@@ -764,8 +761,8 @@ static int init_super0(struct supertype *st, mdu_array_info_t *info,
 	sb->gvalid_words = 0; /* ignored */
 	sb->ctime = time(0);
 	sb->level = info->level;
-	sb->size = size;
-	if (size != (unsigned long long)sb->size)
+	sb->size = s->size;
+	if (s->size != (unsigned long long)sb->size)
 		return 0;
 	sb->nr_disks = info->nr_disks;
 	sb->raid_disks = info->raid_disks;
@@ -814,7 +811,6 @@ struct devinfo {
 	struct devinfo *next;
 };
 
-#ifndef MDASSEMBLE
 /* Add a device to the superblock being created */
 static int add_to_super0(struct supertype *st, mdu_disk_info_t *dinfo,
 			 int fd, char *devname, unsigned long long data_offset)
@@ -845,7 +841,6 @@ static int add_to_super0(struct supertype *st, mdu_disk_info_t *dinfo,
 
 	return 0;
 }
-#endif
 
 static int store_super0(struct supertype *st, int fd)
 {
@@ -899,7 +894,6 @@ static int store_super0(struct supertype *st, int fd)
 	return 0;
 }
 
-#ifndef MDASSEMBLE
 static int write_init_super0(struct supertype *st)
 {
 	mdp_super_t *sb = st->sb;
@@ -930,7 +924,6 @@ static int write_init_super0(struct supertype *st)
 	}
 	return rv;
 }
-#endif
 
 static int compare_super0(struct supertype *st, struct supertype *tst)
 {
@@ -1065,8 +1058,8 @@ static int load_super0(struct supertype *st, int fd, char *devname)
 	 * valid.  If it doesn't clear the bit.  An --assemble --force
 	 * should get that written out.
 	 */
-	if (read(fd, super+1, ROUND_UP(sizeof(struct bitmap_super_s),4096))
-	    != ROUND_UP(sizeof(struct bitmap_super_s),4096))
+	if (read(fd, super+1, ROUND_UP(sizeof(struct bitmap_super_s),4096)) !=
+	    ROUND_UP(sizeof(struct bitmap_super_s), 4096))
 		goto no_bitmap;
 
 	uuid_from_super0(st, uuid);
@@ -1261,13 +1254,12 @@ static void free_super0(struct supertype *st)
 	st->sb = NULL;
 }
 
-#ifndef MDASSEMBLE
 static int validate_geometry0(struct supertype *st, int level,
 			      int layout, int raiddisks,
 			      int *chunk, unsigned long long size,
 			      unsigned long long data_offset,
 			      char *subdev, unsigned long long *freesize,
-			      int verbose)
+			      int consistency_policy, int verbose)
 {
 	unsigned long long ldsize;
 	int fd;
@@ -1320,10 +1312,8 @@ static int validate_geometry0(struct supertype *st, int level,
 	*freesize = MD_NEW_SIZE_SECTORS(ldsize >> 9);
 	return 1;
 }
-#endif /* MDASSEMBLE */
 
 struct superswitch super0 = {
-#ifndef MDASSEMBLE
 	.examine_super = examine_super0,
 	.brief_examine_super = brief_examine_super0,
 	.export_examine_super = export_examine_super0,
@@ -1333,7 +1323,6 @@ struct superswitch super0 = {
 	.validate_geometry = validate_geometry0,
 	.add_to_super = add_to_super0,
 	.copy_metadata = copy_metadata0,
-#endif
 	.match_home = match_home0,
 	.uuid_from_super = uuid_from_super0,
 	.getinfo_super = getinfo_super0,

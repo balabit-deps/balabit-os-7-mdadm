@@ -1,3 +1,23 @@
+mdadm (4.1~rc1-3~ubuntu18.04.1) bionic; urgency=medium
+
+  * No-change backport to bionic to enable Intel VROC support LP: #1779685
+
+ -- Dimitri John Ledkov 🌈 <xnox@ubuntu.com>  Mon, 02 Jul 2018 14:26:00 +0100
+
+mdadm (4.1~rc1-3) unstable; urgency=medium
+
+  * Cherrypick master patches up to 4th of June 2018.
+
+ -- Dimitri John Ledkov 🌈 <xnox@ubuntu.com>  Tue, 26 Jun 2018 15:38:04 +0100
+
+mdadm (4.1~rc1-1) unstable; urgency=medium
+
+  * New upstream release.
+  * Import patches since rc1.
+  * Bump standards version & debhelper compat.
+
+ -- Dimitri John Ledkov <xnox@ubuntu.com>  Tue, 15 May 2018 12:10:33 +0100
+
 mdadm (4.0-2ubuntu1.1) bionic; urgency=medium
 
   * Install identical udev rules into d-i installer udeb, as used in the
