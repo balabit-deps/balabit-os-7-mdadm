@@ -29,3 +29,5 @@ debian-no-Werror.diff
 sha1-includes.diff
 readlink-path.patch
 mdmonitor-service-simplify.diff
+lp-1811228-imsm-Block-volume-creation-with-empty-name.patch
+lp-1811795-remove-external-arrays-and-devices.patch

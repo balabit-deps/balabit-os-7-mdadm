@@ -1,3 +1,12 @@
+mdadm (4.1~rc1-3~ubuntu18.04.2) bionic; urgency=medium
+
+  * d/p/lp-1811228-imsm-Block-volume-creation-with-empty-name.patch: avoid
+    creating whitespaced or empty names (LP: #1811228)
+  * d/p/lp-1811795-remove-external-arrays-and-devices.patch: fix removal of
+    failing disks with external metadata (LP: #1811795)
+
+ -- Christian Ehrhardt <christian.ehrhardt@canonical.com>  Wed, 10 Apr 2019 16:14:17 +0200
+
 mdadm (4.1~rc1-3~ubuntu18.04.1) bionic; urgency=medium
 
   * No-change backport to bionic to enable Intel VROC support LP: #1779685
