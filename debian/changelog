@@ -1,3 +1,22 @@
+mdadm (4.1~rc1-3~ubuntu18.04.4) bionic; urgency=medium
+
+  * Introduce "broken" state for RAID0/Linear in mdadm (LP: #1847924)
+    - d/p/lp1847924-Introduce-new-array-state-broken-for-raid0.patch
+
+  * Disable patches from proposed version 4.1~rc1-3~ubuntu18.04.3 due to
+    issues with kernel
+
+ -- Guilherme G. Piccoli <gpiccoli@canonical.com>  Tue, 14 Jan 2020 16:10:59 -0300
+
+mdadm (4.1~rc1-3~ubuntu18.04.3) bionic; urgency=medium
+
+  * Add support for RAID0 layouts. Released kernels are being updated
+    to require an explicit layout version for multi-zone RAID0 arrays
+    to avoid potential corruption. This update allows users to program
+    such a layout version into the metadata of an array. LP: #1850540
+
+ -- dann frazier <dannf@ubuntu.com>  Wed, 04 Dec 2019 12:52:00 -0700
+
 mdadm (4.1~rc1-3~ubuntu18.04.2) bionic; urgency=medium
 
   * d/p/lp-1811228-imsm-Block-volume-creation-with-empty-name.patch: avoid
